@@ -1,0 +1,25 @@
+{
+  "name": "tab-manager",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:luwenxull/tab-manager.git",
+  "author": "luwenxull <992273307@qq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/preset-react": "^7.6.3",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.5.1",
+    "@material-ui/icons": "^4.5.1",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2"
+  },
+  "scripts": {
+    "build": "webpack",
+    "build:watch": "webpack --watch"
+  }
+}
