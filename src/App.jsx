@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import WindowTab from './Window.jsx';
+import './global.css';
 
 class App extends Component {
   constructor(props) {
@@ -7,14 +8,25 @@ class App extends Component {
     this.state = {
       windows: []
     }
+    this.setWindows = this.setWindows.bind(this)
   }
 
-  componentDidMount() {
+  setWindows() {
     chrome.windows.getAll({populate: true}, ws => {
       this.setState({
         windows: ws,
       })
-      console.log(ws)
+    })
+  }
+  
+  componentDidMount() {
+    this.setWindows()
+    chrome.tabs.onCreated.addListener(this.setWindows)
+    chrome.tabs.onRemoved.addListener(this.setWindows)
+    chrome.tabs.onUpdated.addListener((tabid, info) => {
+      if (info.status === 'complete') {
+        this.setWindows()
+      }
     })
   }
   
