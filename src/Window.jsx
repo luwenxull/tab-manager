@@ -8,6 +8,7 @@ class WindowC extends Component {
     super(props)
     this.closeWindow = this.closeWindow.bind(this)
     this.updateGroupName = this.updateGroupName.bind(this)
+    // this.handleChange = this.handleChange.bind(this)
     this.anchorEl = null
     this.menuItems = [
       {
@@ -48,6 +49,10 @@ class WindowC extends Component {
     }
   }
 
+  handleChange(checked, tab) {
+    console.log({checked, tab})
+  }
+
   showMenu(e) {
     this.anchorEl = e.currentTarget
     this.setState({
@@ -74,11 +79,21 @@ class WindowC extends Component {
             {
               this.props.window.tabs.map(tab => {
                 return (
-                  <MD.ListItem key={tab.id} dense onClick={() => { this.jump(tab) }}>
-                    {/* <MD.ListItemAvatar>
-                      <MD.Avatar alt="" src={tab.favIconUrl} />
-                    </MD.ListItemAvatar> */}
-                    <MD.ListItemText primary={tab.title} secondary={tab.url} />
+                  <MD.ListItem key={tab.id} dense>
+                    <MD.ListItemIcon>
+                      <MD.Checkbox
+                        edge="start"
+                        disableRipple
+                        onChange={(e) => {
+                          this.handleChange(e.target.checked, tab)
+                        }}
+                      />
+                    </MD.ListItemIcon>
+                    <MD.ListItemText
+                      onClick={() => { this.jump(tab) }}
+                      primary={tab.title}
+                      secondary={tab.url}
+                    />
                     <MD.ListItemSecondaryAction>
                       <Menu
                         menuItems={this.menuItems}
