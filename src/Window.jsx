@@ -17,6 +17,7 @@ class Window extends Component {
   constructor(props) {
     super(props)
     this.save = this.save.bind(this)
+    this.close = this.close.bind(this)
     this.anchorEl = null
     this.menuItems = [
       {
@@ -44,6 +45,10 @@ class Window extends Component {
 
   save() {
 
+  }
+
+  close() {
+    chrome.windows.remove(this.props.window.id)
   }
 
   showMenu(e) {
@@ -88,7 +93,7 @@ class Window extends Component {
           </List>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
-          {/* <Buttonall">Cancel</Button> */}
+          <Button color="secondary" onClick={this.close}>关闭窗口</Button>
           <Button color="primary" onClick={this.save}>
             保存为组
           </Button>

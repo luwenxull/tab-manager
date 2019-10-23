@@ -14,8 +14,9 @@ class App extends Component {
   setWindows() {
     chrome.windows.getAll({populate: true}, ws => {
       this.setState({
-        windows: ws,
+        windows: ws.filter(w => w.tabs.length),
       })
+      console.log(ws)
     })
   }
   
