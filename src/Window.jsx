@@ -11,13 +11,21 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import IconButton from '@material-ui/core/IconButton';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import TextField from '@material-ui/core/TextField';
 import Menu from './Menu.jsx';
+import Dialog from './Dialog.jsx'
 
 class Window extends Component {
   constructor(props) {
     super(props)
     this.save = this.save.bind(this)
-    this.close = this.close.bind(this)
+    this.close = this.closeWindow.bind(this)
+    this.updateGroupName = this.updateGroupName.bind(this)
     this.anchorEl = null
     this.menuItems = [
       {
@@ -29,12 +37,32 @@ class Window extends Component {
         }
       },
       {
-        text: '关闭',
+        text: '关闭（移除）',
         action: (tab) => {
-          chrome.tabs.remove(tab.id)
+          if (this.props.window.notRealWindow) {
+            chrome.storage.local.get(['savedGroups'], result => {
+              const groups = result.savedGroups.map(group => {
+                if (group.id === this.props.group.id) {
+                  const newGroup = Object.assign({}, group, {
+                    windows: [{
+                      tabs: this.props.window.tabs.filter(tab_1 => tab !== tab_1)
+                    }]
+                  })
+                  return newGroup
+                }
+                return group
+              })
+              chrome.storage.local.set({
+                savedGroups: groups,
+              }, close)
+            })
+          } else {
+            chrome.tabs.remove(tab.id)
+          }
         }
       }
     ]
+    this.groupName = null;
   }
 
   jump(tab) {
@@ -43,12 +71,32 @@ class Window extends Component {
     })
   }
 
-  save() {
-
+  save(close) {
+    // TODO validate
+    // chrome.storage.local.clear()
+    chrome.storage.local.get(['savedGroups'], result => {
+      const groups = [].concat(result.savedGroups || [])
+      groups.push(
+        {
+          name: this.groupName,
+          id: Date.now(),
+          windows: [Object.assign({
+            notRealWindow: true
+          }, this.props.window)],
+        }
+      )
+      chrome.storage.local.set({
+        savedGroups: groups,
+      }, close)
+    })
   }
 
-  close() {
-    chrome.windows.remove(this.props.window.id)
+  closeWindow() {
+    if (this.props.window.notRealWindow) {
+      console.log('eeeeeeeeee')
+    } else {
+      chrome.windows.remove(this.props.window.id)
+    }
   }
 
   showMenu(e) {
@@ -60,6 +108,10 @@ class Window extends Component {
 
   closeMenu() {
     this.anchorEl = null
+  }
+
+  updateGroupName(e) {
+    this.groupName = e.target.value
   }
 
   render() {
@@ -81,7 +133,11 @@ class Window extends Component {
                     <ListItemSecondaryAction>
                       <Menu
                         menuItems={this.menuItems}
-                        trigger={<Button>操作</Button>}
+                        trigger={
+                          <IconButton>
+                            <MoreVertIcon />
+                          </IconButton>
+                        }
                         actionData={tab}
                       >
                       </Menu>
@@ -93,10 +149,49 @@ class Window extends Component {
           </List>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
-          <Button color="secondary" onClick={this.close}>关闭窗口</Button>
-          <Button color="primary" onClick={this.save}>
-            保存为组
-          </Button>
+          <Button color="secondary" onClick={this.closeWindow}>关闭窗口</Button>
+          <Dialog
+            trigger={
+              <Button color="primary">
+                保存为组
+              </Button>
+            }
+            render={
+              (handleClose) => {
+                return (
+                  <>
+                    <DialogContent>
+                      <DialogContentText>
+                        将该窗口的所有页面保存为组
+                      </DialogContentText>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="组名称"
+                        placerholer="请输入组名称"
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                        onChange={this.updateGroupName}
+                      />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose} color="primary">
+                        取消
+                      </Button>
+                      <Button onClick={() => {
+                        this.save(handleClose)
+                      }} color="primary">
+                        保存
+                    </Button>
+                    </DialogActions>
+                  </>
+                )
+              }
+            }
+          >
+          </Dialog>
         </ExpansionPanelActions>
       </ExpansionPanel>
     );
