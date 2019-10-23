@@ -1,11 +1,11 @@
 const path = require('path');
 
 module.exports = {
-  mode: 'production',
+  mode: 'development',
   entry: {
     options: './src/options.jsx',
   },
-  // devtool: 'inline-source-map',
+  devtool: 'inline-source-map',
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'extension'),

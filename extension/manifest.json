@@ -4,5 +4,8 @@
   "description": "Manage your tabs easily!",
   "permissions": ["tabs", "declarativeContent", "storage"],
   "manifest_version": 2,
-  "options_page": "options.html"
+  "options_page": "options.html",
+  "icons": {
+    "128": "browsers.png"
+  }
 }
