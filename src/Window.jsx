@@ -1,30 +1,12 @@
 import React, { Component } from 'react';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import TextField from '@material-ui/core/TextField';
-import Menu from './Menu.jsx';
-import Dialog from './Dialog.jsx'
+import MD from './conditionalRequre'
+import Menu from './components/Menu.jsx';
+import Dialog from './components/Dialog.jsx';
 
-class Window extends Component {
+class WindowC extends Component {
   constructor(props) {
     super(props)
-    this.save = this.save.bind(this)
-    this.close = this.closeWindow.bind(this)
+    this.closeWindow = this.closeWindow.bind(this)
     this.updateGroupName = this.updateGroupName.bind(this)
     this.anchorEl = null
     this.menuItems = [
@@ -39,23 +21,10 @@ class Window extends Component {
       {
         text: '关闭（移除）',
         action: (tab) => {
-          if (this.props.window.notRealWindow) {
-            chrome.storage.local.get(['savedGroups'], result => {
-              const groups = result.savedGroups.map(group => {
-                if (group.id === this.props.group.id) {
-                  const newGroup = Object.assign({}, group, {
-                    windows: [{
-                      tabs: this.props.window.tabs.filter(tab_1 => tab !== tab_1)
-                    }]
-                  })
-                  return newGroup
-                }
-                return group
-              })
-              chrome.storage.local.set({
-                savedGroups: groups,
-              }, close)
-            })
+          if (this.props.window.isFake) {
+            this.props.updateGroup(
+              this.props.window.tabs.filter(tab_1 => tab_1 !== tab)
+            )
           } else {
             chrome.tabs.remove(tab.id)
           }
@@ -68,26 +37,6 @@ class Window extends Component {
   jump(tab) {
     chrome.tabs.create({
       url: tab.url
-    })
-  }
-
-  save(close) {
-    // TODO validate
-    // chrome.storage.local.clear()
-    chrome.storage.local.get(['savedGroups'], result => {
-      const groups = [].concat(result.savedGroups || [])
-      groups.push(
-        {
-          name: this.groupName,
-          id: Date.now(),
-          windows: [Object.assign({
-            notRealWindow: true
-          }, this.props.window)],
-        }
-      )
-      chrome.storage.local.set({
-        savedGroups: groups,
-      }, close)
     })
   }
 
@@ -116,55 +65,58 @@ class Window extends Component {
 
   render() {
     return (
-      <ExpansionPanel defaultExpanded>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+      <MD.ExpansionPanel defaultExpanded>
+        <MD.ExpansionPanelSummary expandIcon={<MD.ExpandMoreIcon />}>
           {this.props.window.focused ? "当前窗口" : "其他窗口"}
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <List className='full-width'>
+        </MD.ExpansionPanelSummary>
+        <MD.ExpansionPanelDetails>
+          <MD.List className='full-width'>
             {
               this.props.window.tabs.map(tab => {
                 return (
-                  <ListItem key={tab.id} dense onClick={() => { this.jump(tab) }}>
-                    <ListItemAvatar>
-                      <Avatar alt="" src={tab.favIconUrl} />
-                    </ListItemAvatar>
-                    <ListItemText primary={tab.title} secondary={tab.url} />
-                    <ListItemSecondaryAction>
+                  <MD.ListItem key={tab.id} dense onClick={() => { this.jump(tab) }}>
+                    {/* <MD.ListItemAvatar>
+                      <MD.Avatar alt="" src={tab.favIconUrl} />
+                    </MD.ListItemAvatar> */}
+                    <MD.ListItemText primary={tab.title} secondary={tab.url} />
+                    <MD.ListItemSecondaryAction>
                       <Menu
                         menuItems={this.menuItems}
                         trigger={
-                          <IconButton>
-                            <MoreVertIcon />
-                          </IconButton>
+                          <MD.IconButton>
+                            <MD.MoreVertIcon />
+                          </MD.IconButton>
                         }
                         actionData={tab}
                       >
                       </Menu>
-                    </ListItemSecondaryAction>
-                  </ListItem>
+                    </MD.ListItemSecondaryAction>
+                  </MD.ListItem>
                 )
               })
             }
-          </List>
-        </ExpansionPanelDetails>
-        <ExpansionPanelActions>
-          <Button color="secondary" onClick={this.closeWindow}>关闭窗口</Button>
+          </MD.List>
+        </MD.ExpansionPanelDetails>
+        <MD.ExpansionPanelActions>
+          {
+            !this.props.window.isFake
+              && <MD.Button color="secondary" onClick={this.closeWindow}>关闭窗口</MD.Button>
+          }
           <Dialog
             trigger={
-              <Button color="primary">
+              <MD.Button color="primary">
                 保存为组
-              </Button>
+              </MD.Button>
             }
             render={
               (handleClose) => {
                 return (
                   <>
-                    <DialogContent>
-                      <DialogContentText>
+                    <MD.DialogContent>
+                      <MD.DialogContentText>
                         将该窗口的所有页面保存为组
-                      </DialogContentText>
-                      <TextField
+                      </MD.DialogContentText>
+                      <MD.TextField
                         autoFocus
                         margin="dense"
                         id="name"
@@ -175,27 +127,32 @@ class Window extends Component {
                         variant="outlined"
                         onChange={this.updateGroupName}
                       />
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handleClose} color="primary">
+                    </MD.DialogContent>
+                    <MD.DialogActions>
+                      <MD.Button onClick={handleClose} color="primary">
                         取消
-                      </Button>
-                      <Button onClick={() => {
-                        this.save(handleClose)
-                      }} color="primary">
+                      </MD.Button>
+                      <MD.Button
+                        onClick={() => {
+                          this.props.addGroup(
+                            this.groupName, this.props.window, handleClose
+                          )
+                        }}
+                        color="primary"
+                      >
                         保存
-                    </Button>
-                    </DialogActions>
+                      </MD.Button>
+                    </MD.DialogActions>
                   </>
                 )
               }
             }
           >
           </Dialog>
-        </ExpansionPanelActions>
-      </ExpansionPanel>
+        </MD.ExpansionPanelActions>
+      </MD.ExpansionPanel>
     );
   }
 }
 
-export default Window;
+export default WindowC;

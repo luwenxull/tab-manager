@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import MD from './conditionalRequre';
 import Group from './Group.jsx';
 import './global.css';
 
@@ -22,12 +21,14 @@ class App extends Component {
         const groups = [
           {
             name: '未命名',
-            windows: ws.filter(w => w.tabs.length),
             id: Date.now(),
+            unnamed: true,
+            windows: ws.filter(w => w.tabs.length),
           }
         ]
         this.setState({
           groups: groups.concat(savedGroups)
+          // groups,
         })
     })
     })
@@ -56,20 +57,28 @@ class App extends Component {
     if (this.state.groups.length < value + 1) {
       value = 0
     }
+    const group = this.state.groups.find((g, i) => i === value)
     return (
       <div>
-        <Tabs value={value} onChange={this.tabChange}>
+        <MD.AppBar position="static" color="default">
+          <MD.Tabs
+            value={value}
+            onChange={this.tabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+          >
+            {
+              this.state.groups.map((group, index) => {
+                return <MD.Tab label={group.name} key={index}/>
+              })
+            }
+          </MD.Tabs>
+        </MD.AppBar>
+        <MD.Box p={2}>
           {
-            this.state.groups.map((group, index) => {
-              return <Tab label={group.name} key={index}/>
-            })
+            group && <Group group={group} />
           }
-        </Tabs>
-        {
-          this.state.groups.filter((g, i) => i === value).map(group => {
-            return <Group group={group} key={group.id}/>
-          })
-        }
+        </MD.Box>
       </div>
     );
   }
