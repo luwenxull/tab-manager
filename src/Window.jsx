@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MD from './conditionalRequre'
 import Menu from './components/Menu.jsx';
-import Dialog from './components/Dialog.jsx';
+import SaveAsGroup from './saveAsGroup.jsx'
 
 class WindowC extends Component {
   constructor(props) {
@@ -33,6 +33,7 @@ class WindowC extends Component {
       }
     ]
     this.groupName = null;
+    this.checked = []
   }
 
   jump(tab) {
@@ -51,6 +52,14 @@ class WindowC extends Component {
 
   handleChange(checked, tab) {
     console.log({checked, tab})
+    if (checked) {
+      this.checked.push(tab)
+    } else {
+      const index = this.checked.indexOf(tab)
+      if (index > -1) {
+        this.checked.splice(index, 1)
+      }
+    }
   }
 
   showMenu(e) {
@@ -117,53 +126,26 @@ class WindowC extends Component {
             !this.props.window.isFake
               && <MD.Button color="secondary" onClick={this.closeWindow}>关闭窗口</MD.Button>
           }
-          <Dialog
-            trigger={
-              <MD.Button color="primary">
-                保存为组
-              </MD.Button>
-            }
-            render={
-              (handleClose) => {
-                return (
-                  <>
-                    <MD.DialogContent>
-                      <MD.DialogContentText>
-                        将该窗口的所有页面保存为组
-                      </MD.DialogContentText>
-                      <MD.TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="组名称"
-                        placerholer="请输入组名称"
-                        type="text"
-                        fullWidth
-                        variant="outlined"
-                        onChange={this.updateGroupName}
-                      />
-                    </MD.DialogContent>
-                    <MD.DialogActions>
-                      <MD.Button onClick={handleClose} color="primary">
-                        取消
-                      </MD.Button>
-                      <MD.Button
-                        onClick={() => {
-                          this.props.addGroup(
-                            this.groupName, this.props.window, handleClose
-                          )
-                        }}
-                        color="primary"
-                      >
-                        保存
-                      </MD.Button>
-                    </MD.DialogActions>
-                  </>
-                )
-              }
-            }
-          >
-          </Dialog>
+          {
+            !this.props.window.isFake
+              && (
+                <SaveAsGroup
+                  triggerText="保存为组并关闭标签"
+                  confirm={(name, handleClose) => {
+                    this.props.addGroup(name, this.props.window, () => {
+                      this.closeWindow()
+                      handleClose()
+                    })
+                  }}
+                />
+              )
+          }
+          <SaveAsGroup
+            triggerText="保存为组"
+            confirm={(name, handleClose) => {
+              this.props.addGroup(name, this.props.window, handleClose)
+            }}
+          />
         </MD.ExpansionPanelActions>
       </MD.ExpansionPanel>
     );

@@ -1,8 +1,8 @@
 import React from 'react';
 import MD from '../conditionalRequre';
 
-export default function FormDialog(props) {
-  const [open, setOpen] = React.useState(false);
+export default function Dialog(props) {
+  const [open, setOpen] = React.useState(props.defaultOpened || false);
 
   const handleClickOpen = () => {
     setOpen(true);

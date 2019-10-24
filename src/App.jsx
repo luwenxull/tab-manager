@@ -20,7 +20,7 @@ class App extends Component {
       chrome.windows.getAll({ populate: true }, ws => {
         const groups = [
           {
-            name: '未命名',
+            name: '当前活动页',
             id: Date.now(),
             unnamed: true,
             windows: ws.filter(w => w.tabs.length),
