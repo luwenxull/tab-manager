@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import MD from './conditionalRequre';
 import WindowC from './Window.jsx';
 import { copyTab } from './util';
+import { SavedGroupsContext } from './context';
 
 export default class Group extends Component {
   constructor(props) {
@@ -12,42 +13,36 @@ export default class Group extends Component {
   }
 
   deleteGroup() {
-    chrome.storage.local.get(['savedGroups'], result => {
-      chrome.storage.local.set({
-        savedGroups: result.savedGroups.filter(group => group.id !== this.props.group.id)
-      })
+    chrome.storage.local.set({
+      savedGroups: this.context.filter(group => group.id !== this.props.group.id)
     })
   }
 
   updateGroup(tabs) {
-    chrome.storage.local.get(['savedGroups'], result => {
-      const group = result.savedGroups.find(group => group.id === this.props.group.id)
-      group.window.tabs = tabs
-      chrome.storage.local.set({
-        savedGroups: result.savedGroups
-      })
+    const group = this.context.find(group => group.id === this.props.group.id)
+    group.window.tabs = tabs
+    chrome.storage.local.set({
+      savedGroups: this.context
     })
   }
 
-  addGroup(name, window, callback) {
+  addGroup(name, tabs, callback) {
     // TODO validate
     // chrome.storage.local.clear()
-    chrome.storage.local.get(['savedGroups'], result => {
-      const groups = [].concat(result.savedGroups || [])
-      groups.push(
-        {
-          name: name,
-          id: Date.now(),
-          window: {
-            isFake: true,
-            tabs: window.tabs.map(copyTab)
-          },
-        }
-      )
-      chrome.storage.local.set({
-        savedGroups: groups,
-      }, callback)
-    })
+    const groups = this.context.concat([])
+    groups.push(
+      {
+        name: name,
+        id: Date.now(),
+        window: {
+          isFake: true,
+          tabs: tabs.map(copyTab)
+        },
+      }
+    )
+    chrome.storage.local.set({
+      savedGroups: groups,
+    }, callback)
   }
 
   createWindow() {
@@ -59,6 +54,7 @@ export default class Group extends Component {
             window={w}
             updateGroup={this.updateGroup}
             addGroup={this.addGroup}
+            group={this.props.group}
           />
         )
       })
@@ -68,6 +64,7 @@ export default class Group extends Component {
           window={this.props.group.window}
           updateGroup={this.updateGroup}
           addGroup={this.addGroup}
+          group={this.props.group}
         />
       )
     }
@@ -95,3 +92,5 @@ export default class Group extends Component {
     )
   }
 }
+
+Group.contextType = SavedGroupsContext

@@ -68,7 +68,7 @@ class App extends Component {
     }
     const group = this.state.groups.find((g, i) => i === value)
     return (
-      <SavedGroupsContext.Provider value={this.state.savedGroups}>
+      <>
         <MD.AppBar position="static" color="primary">
           <MD.Tabs
             value={value}
@@ -84,11 +84,13 @@ class App extends Component {
           </MD.Tabs>
         </MD.AppBar>
         <MD.Box p={2}>
-          {
-            group && <Group group={group} />
-          }
+          <SavedGroupsContext.Provider value={this.state.savedGroups}>
+            {
+              group && <Group group={group} />
+            }
+          </SavedGroupsContext.Provider>
         </MD.Box>
-      </SavedGroupsContext.Provider>
+      </>
     );
   }
 }

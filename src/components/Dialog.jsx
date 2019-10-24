@@ -9,17 +9,25 @@ export default function Dialog(props) {
   };
 
   const handleClose = () => {
-    setOpen(false);
+    if (props.controlledByOuter) {
+      typeof props.requestClose === 'function' && props.requestClose()
+    } else {
+      setOpen(false);
+    }
   };
 
   return (
     <>
-      <div onClick={handleClickOpen}>
-        {props.trigger}
-      </div>
-      <MD.Dialog open={open} onClose={handleClose}>
+      {
+        !props.controlledByOuter && <div onClick={handleClickOpen}>{props.trigger}</div>
+      }
+      <MD.Dialog
+        open={props.controlledByOuter ? props.open : open}
+        onClose={handleClose}
+        {...(props.dialog || {})}
+      >
         {
-          props.render(handleClose)
+          props.controlledByOuter ? props.children : props.render(handleClose)
         }
       </MD.Dialog>
     </>

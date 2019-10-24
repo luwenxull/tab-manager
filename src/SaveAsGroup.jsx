@@ -11,6 +11,12 @@ export default function SaveAsGroup(props) {
 
   return (
     <Dialog
+      dialog={
+        {
+          fullWidth: true,
+          maxWidth: 'sm'
+        }
+      }
       trigger={
         <MD.Button color="primary">
           {props.triggerText}
@@ -20,6 +26,7 @@ export default function SaveAsGroup(props) {
         (handleClose) => {
           return (
             <>
+              <MD.DialogTitle>组名</MD.DialogTitle>
               <MD.DialogContent>
                 <MD.DialogContentText>
                   将选中页面页面保存为组。默认选中所有页面
@@ -37,7 +44,7 @@ export default function SaveAsGroup(props) {
                 />
               </MD.DialogContent>
               <MD.DialogActions>
-                <MD.Button onClick={handleClose} color="primary">
+                <MD.Button onClick={handleClose} color="secondary">
                   取消
                 </MD.Button>
                 <MD.Button
