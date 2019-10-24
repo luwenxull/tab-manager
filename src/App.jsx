@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import MD from './conditionalRequre';
 import Group from './Group.jsx';
 import './global.css';
+import { copyTab } from './util';
+import { SavedGroupsContext } from './context'
 
 class App extends Component {
   constructor(props) {
@@ -9,6 +11,7 @@ class App extends Component {
     this.state = {
       value: 0,
       groups: [],
+      savedGroups: [],
     }
     this.setGroups = this.setGroups.bind(this)
     this.tabChange = this.tabChange.bind(this)
@@ -23,14 +26,20 @@ class App extends Component {
             name: '当前活动页',
             id: Date.now(),
             unnamed: true,
-            windows: ws.filter(w => w.tabs.length),
+            windows: ws.filter(w => w.tabs.length).map(w => {
+              return {
+                isFake: false,
+                id: w.id,
+                tabs: w.tabs.map(copyTab)
+              }
+            }),
           }
         ]
         this.setState({
-          groups: groups.concat(savedGroups)
-          // groups,
+          groups: groups.concat(savedGroups),
+          savedGroups,
         })
-    })
+      })
     })
   }
 
@@ -59,8 +68,8 @@ class App extends Component {
     }
     const group = this.state.groups.find((g, i) => i === value)
     return (
-      <div>
-        <MD.AppBar position="static" color="default">
+      <SavedGroupsContext.Provider value={this.state.savedGroups}>
+        <MD.AppBar position="static" color="primary">
           <MD.Tabs
             value={value}
             onChange={this.tabChange}
@@ -69,7 +78,7 @@ class App extends Component {
           >
             {
               this.state.groups.map((group, index) => {
-                return <MD.Tab label={group.name} key={index}/>
+                return <MD.Tab label={group.name} key={index} />
               })
             }
           </MD.Tabs>
@@ -79,7 +88,7 @@ class App extends Component {
             group && <Group group={group} />
           }
         </MD.Box>
-      </div>
+      </SavedGroupsContext.Provider>
     );
   }
 }

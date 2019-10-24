@@ -6,8 +6,9 @@ import SaveAsGroup from './saveAsGroup.jsx'
 class WindowC extends Component {
   constructor(props) {
     super(props)
-    this.closeWindow = this.closeWindow.bind(this)
+    this.closeTabs = this.closeTabs.bind(this)
     this.updateGroupName = this.updateGroupName.bind(this)
+    this.openTabs = this.openTabs.bind(this)
     // this.handleChange = this.handleChange.bind(this)
     this.anchorEl = null
     this.menuItems = [
@@ -20,7 +21,7 @@ class WindowC extends Component {
         }
       },
       {
-        text: '关闭（移除）',
+        text: this.props.window.isFake ? '移除' : '关闭·',
         action: (tab) => {
           if (this.props.window.isFake) {
             this.props.updateGroup(
@@ -29,6 +30,12 @@ class WindowC extends Component {
           } else {
             chrome.tabs.remove(tab.id)
           }
+        }
+      },
+      {
+        text: '复制到组',
+        action: () => {
+          
         }
       }
     ]
@@ -42,24 +49,33 @@ class WindowC extends Component {
     })
   }
 
-  closeWindow() {
-    if (this.props.window.notRealWindow) {
-      console.log('eeeeeeeeee')
-    } else {
-      chrome.windows.remove(this.props.window.id)
-    }
+  closeTabs() {
+    // chrome.windows.remove(this.props.window.id)
+    const tabs = this.checked.length ? this.checked : this.props.window.tabs
+    chrome.tabs.remove(tabs.map(tab => tab.id))
+  }
+
+  openTabs() {
+    const tabs = this.checked.length ? this.checked : this.props.window.tabs
+    tabs.forEach(tab => {
+      chrome.tabs.create({
+        url: tab.url
+      })
+    })
   }
 
   handleChange(checked, tab) {
-    console.log({checked, tab})
-    if (checked) {
-      this.checked.push(tab)
-    } else {
-      const index = this.checked.indexOf(tab)
-      if (index > -1) {
-        this.checked.splice(index, 1)
-      }
-    }
+    tab.checked = checked
+    // if (checked) {
+    //   this.checked.push(tab)
+    // } else {
+    //   const index = this.checked.indexOf(tab)
+    //   if (index > -1) {
+    //     this.checked.splice(index, 1)
+    //   }
+    // }
+    this.checked = this.props.window.tabs.filter(tab => tab.checked)
+    console.log(this.checked)
   }
 
   showMenu(e) {
@@ -124,21 +140,25 @@ class WindowC extends Component {
         <MD.ExpansionPanelActions>
           {
             !this.props.window.isFake
-              && <MD.Button color="secondary" onClick={this.closeWindow}>关闭窗口</MD.Button>
+              && <MD.Button color="secondary" onClick={this.closeTabs}>关闭</MD.Button>
           }
           {
             !this.props.window.isFake
               && (
                 <SaveAsGroup
-                  triggerText="保存为组并关闭标签"
+                  triggerText="保存为组并关闭"
                   confirm={(name, handleClose) => {
                     this.props.addGroup(name, this.props.window, () => {
-                      this.closeWindow()
+                      this.closeTabs()
                       handleClose()
                     })
                   }}
                 />
               )
+          }
+          {
+            this.props.window.isFake
+              && <MD.Button color="primary" onClick={this.openTabs}>打开</MD.Button>
           }
           <SaveAsGroup
             triggerText="保存为组"

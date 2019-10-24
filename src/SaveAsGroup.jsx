@@ -22,7 +22,7 @@ export default function SaveAsGroup(props) {
             <>
               <MD.DialogContent>
                 <MD.DialogContentText>
-                  将该窗口的所有页面保存为组
+                  将选中页面页面保存为组。默认选中所有页面
                 </MD.DialogContentText>
                 <MD.TextField
                   autoFocus

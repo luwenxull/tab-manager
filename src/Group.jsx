@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import MD from './conditionalRequre';
 import WindowC from './Window.jsx';
+import { copyTab } from './util';
 
 export default class Group extends Component {
   constructor(props) {
@@ -39,14 +40,7 @@ export default class Group extends Component {
           id: Date.now(),
           window: {
             isFake: true,
-            tabs: window.tabs.map(tab => {
-              return {
-                favIconUrl: tab.favIconUrl,
-                title: tab.title,
-                url: tab.url,
-                id: tab.id,
-              }
-            })
+            tabs: window.tabs.map(copyTab)
           },
         }
       )
@@ -85,13 +79,13 @@ export default class Group extends Component {
         <MD.Box m={2}>
           {
             !this.props.group.unnamed
-              && (
-                <MD.Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={this.deleteGroup}
-                >删除当前组</MD.Button>
-              )
+            && (
+              <MD.Button
+                variant="contained"
+                color="secondary"
+                onClick={this.deleteGroup}
+              >删除当前组</MD.Button>
+            )
           }
         </MD.Box>
         {
