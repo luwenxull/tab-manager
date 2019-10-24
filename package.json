@@ -21,7 +21,7 @@
     "react-dom": "^16.10.2"
   },
   "scripts": {
-    "build": "webpack",
-    "build:watch": "webpack --watch"
+    "dev": "webpack --watch --config webpack.config.dev.js",
+    "build": "webpack"
   }
 }
