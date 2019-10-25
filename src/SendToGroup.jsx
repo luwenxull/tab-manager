@@ -41,7 +41,7 @@ export default class SendToGroup extends Component {
       >
         <MD.DialogTitle>选择组</MD.DialogTitle>
         <MD.DialogContent>
-          <MD.FormControl variant="filled" fullWidth>
+          <MD.FormControl variant="filled" fullWidth disabled={this.context.length === 0}>
             <MD.InputLabel htmlFor="group">组名</MD.InputLabel>
             <MD.Select
               fullWidth
@@ -57,7 +57,7 @@ export default class SendToGroup extends Component {
                 this.context.filter(group => group !== this.props.from).map(group => {
                   return <MD.MenuItem value={group} key={group.id}>{group.name}</MD.MenuItem>
                 })
-              }
+              } 
             </MD.Select>
           </MD.FormControl>
         </MD.DialogContent>

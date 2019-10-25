@@ -48,6 +48,7 @@ export default class WindowC extends Component {
     this.closeTabs = this.closeTabs.bind(this)
     this.openTabs = this.openTabs.bind(this)
     this.closeSendToGroup = this.closeSendToGroup.bind(this)
+    this.showSendToGroup = this.showSendToGroup.bind(this)
     this.handleSendToGroup = this.handleSendToGroup.bind(this)
     this.handleSaveAsGroup = this.handleSaveAsGroup.bind(this)
     this.handleSaveAsGroupAndClose = this.handleSaveAsGroupAndClose.bind(this)
@@ -71,8 +72,13 @@ export default class WindowC extends Component {
   }
 
   closeTabs() {
-    // chrome.windows.remove(this.props.window.id)
-    chrome.tabs.remove(this.tabs.map(tab => tab.id))
+    if (this.props.window.isFake) {
+      this.props.updateGroup(
+        this.props.window.tabs.filter(tab => this.tabs.indexOf(tab) === -1)
+      )
+    } else {
+      chrome.tabs.remove(this.tabs.map(tab => tab.id))
+    }
   }
 
   openTabs() {
@@ -85,6 +91,13 @@ export default class WindowC extends Component {
 
   handleChange(checked, tab) {
     tab.checked = checked
+  }
+
+  showSendToGroup() {
+    this.setState({
+      showSendToGroup: true,
+      activeTabs: this.tabs,
+    })
   }
 
   handleSendToGroup(groups) {
@@ -157,10 +170,14 @@ export default class WindowC extends Component {
             </MD.List>
           </MD.ExpansionPanelDetails>
           <MD.ExpansionPanelActions>
-            {
-              !this.props.window.isFake
-                && <MD.Button color="secondary" onClick={this.closeTabs}>关闭</MD.Button>
-            }
+            <MD.Button color="secondary" onClick={this.closeTabs}>
+              {
+                this.props.window.isFake ? '移除' : '关闭'
+              }
+            </MD.Button>
+            <MD.Button color="primary" onClick={this.showSendToGroup}>
+              复制到组
+            </MD.Button>
             {
               !this.props.window.isFake
                 && (
