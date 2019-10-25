@@ -123,7 +123,7 @@ export default class WindowC extends Component {
               {
                 this.props.window.tabs.map(tab => {
                   return (
-                    <MD.ListItem key={tab.id} dense>
+                    <MD.ListItem key={tab.uuid} dense>
                       <MD.ListItemIcon>
                         <MD.Checkbox
                           edge="start"

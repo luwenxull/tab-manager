@@ -1,2 +1,4 @@
 node_modules
 extension/options.js
+extension/vendors.js
+extension/tm-options.html

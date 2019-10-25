@@ -1,3 +1,5 @@
+import uuid from 'uuid/v4'
+
 export function copyTab(tab) {
   return {
     favIconUrl: tab.favIconUrl,
@@ -5,5 +7,6 @@ export function copyTab(tab) {
     url: tab.url,
     id: tab.id,
     checked: false,
+    uuid: uuid(),
   }
 }

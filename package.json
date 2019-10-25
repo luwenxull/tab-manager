@@ -10,6 +10,7 @@
     "@babel/preset-react": "^7.6.3",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.2.0",
+    "html-webpack-plugin": "^3.2.0",
     "style-loader": "^1.0.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9"
@@ -18,10 +19,11 @@
     "@material-ui/core": "^4.5.1",
     "@material-ui/icons": "^4.5.1",
     "react": "^16.10.2",
-    "react-dom": "^16.10.2"
+    "react-dom": "^16.10.2",
+    "uuid": "^3.3.3"
   },
   "scripts": {
-    "dev": "webpack --watch --config webpack.config.dev.js",
-    "build": "webpack"
+    "dev": "webpack --watch",
+    "build": "webpack --env.production"
   }
 }
