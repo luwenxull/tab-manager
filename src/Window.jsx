@@ -109,6 +109,9 @@ export default class WindowC extends Component {
   }
 
   render() {
+    if (this.props.window.tabs.length === 0) {
+      return null
+    }
     return (
       <>
         <MD.ExpansionPanel defaultExpanded>

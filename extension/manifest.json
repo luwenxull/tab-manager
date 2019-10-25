@@ -2,10 +2,13 @@
   "name": "Tab Manager",
   "version": "0.1",
   "description": "Manage your tabs easily!",
-  "permissions": ["tabs", "declarativeContent", "storage"],
+  "permissions": ["tabs", "storage"],
   "manifest_version": 2,
-  "options_page": "options.html",
+  "options_page": "tm-options.html",
   "icons": {
     "128": "browsers.png"
+  },
+  "browser_action": {
+    "default_popup": "popup.html"
   }
 }
