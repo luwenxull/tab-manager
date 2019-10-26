@@ -126,12 +126,9 @@ export default class WindowC extends Component {
       return null
     }
     return (
-      <>
-        <MD.ExpansionPanel defaultExpanded>
-          <MD.ExpansionPanelSummary expandIcon={<MD.ExpandMoreIcon />}>
-            {this.props.window.focused ? "当前窗口" : "其他窗口"}
-          </MD.ExpansionPanelSummary>
-          <MD.ExpansionPanelDetails>
+      <MD.Box m={2}>
+        <MD.Card>
+          <MD.CardContent>
             <MD.List className='full-width'>
               {
                 this.props.window.tabs.map(tab => {
@@ -167,8 +164,8 @@ export default class WindowC extends Component {
                 })
               }
             </MD.List>
-          </MD.ExpansionPanelDetails>
-          <MD.ExpansionPanelActions>
+          </MD.CardContent>
+          <MD.CardActions>
             <MD.Button color="secondary" onClick={this.closeTabs}>
               {
                 this.props.window.isFake ? '移除' : '关闭'
@@ -194,15 +191,15 @@ export default class WindowC extends Component {
               triggerText="保存为组"
               confirm={this.handleSaveAsGroup}
             />
-          </MD.ExpansionPanelActions>
-        </MD.ExpansionPanel>
+          </MD.CardActions>
+        </MD.Card>
         <SendToGroup
           from={this.props.group}
           open={this.state.showSendToGroup}
           handleClose={this.closeSendToGroup}
           handleSave={this.handleSendToGroup}
         />
-      </>
+      </MD.Box>
     );
   }
 }

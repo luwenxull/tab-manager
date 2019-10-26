@@ -2,6 +2,10 @@ import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
 import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,10 +14,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Fab from '@material-ui/core/Fab';
 import FormControl from '@material-ui/core/FormControl'
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+// import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+// import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
+// import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+// import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel'
@@ -38,16 +42,20 @@ export default {
   Avatar,
   Box,
   Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
   Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  ExpansionPanel,
-  ExpansionPanelActions,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
+  // ExpansionPanel,
+  // ExpansionPanelActions,
+  // ExpansionPanelDetails,
+  // ExpansionPanelSummary,
   ExpandMoreIcon,
   Fab,
   FormControl,
