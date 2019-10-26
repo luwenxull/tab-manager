@@ -1,5 +1,5 @@
 import React from 'react';
-import MD from '../conditionalRequre';
+import MD from '../mdui';
 
 export default function Dialog(props) {
   const [open, setOpen] = React.useState(props.defaultOpened || false);

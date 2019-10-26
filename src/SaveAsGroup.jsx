@@ -1,6 +1,6 @@
 import React from 'react'
-import Dialog from './components/Dialog.jsx'
-import MD from './conditionalRequre'
+import C from './components'
+import MD from './mdui'
 
 export default function SaveAsGroup(props) {
   let groupName;
@@ -10,7 +10,7 @@ export default function SaveAsGroup(props) {
   }
 
   return (
-    <Dialog
+    <C.Dialog
       dialog={
         {
           fullWidth: true,

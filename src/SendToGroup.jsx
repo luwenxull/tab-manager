@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import MD from './conditionalRequre'
-import Dialog from './components/Dialog.jsx'
+import MD from './mdui'
+import C from './components'
 import { SavedGroupsContext } from './context'
 
 export default class SendToGroup extends Component {
@@ -21,14 +21,17 @@ export default class SendToGroup extends Component {
     })
   }
 
-
   handleSave() {
     this.props.handleSave(this.state.group)
   }
 
+  get availableGroups() {
+    return this.context.filter(group => group !== this.props.from)
+  }
+
   render() {
     return (
-      <Dialog
+      <C.Dialog
         controlledByOuter
         open={this.props.open}
         requestClose={this.props.handleClose}
@@ -41,7 +44,7 @@ export default class SendToGroup extends Component {
       >
         <MD.DialogTitle>选择组</MD.DialogTitle>
         <MD.DialogContent>
-          <MD.FormControl variant="filled" fullWidth disabled={this.context.length === 0}>
+          <MD.FormControl variant="filled" fullWidth disabled={this.availableGroups.length === 0}>
             <MD.InputLabel htmlFor="group">组名</MD.InputLabel>
             <MD.Select
               fullWidth
@@ -54,10 +57,10 @@ export default class SendToGroup extends Component {
               }}
             >
               {
-                this.context.filter(group => group !== this.props.from).map(group => {
+                this.availableGroups.map(group => {
                   return <MD.MenuItem value={group} key={group.id}>{group.name}</MD.MenuItem>
                 })
-              } 
+              }
             </MD.Select>
           </MD.FormControl>
         </MD.DialogContent>
@@ -72,7 +75,7 @@ export default class SendToGroup extends Component {
             保存
           </MD.Button>
         </MD.DialogActions>
-      </Dialog>
+      </C.Dialog>
     )
   }
 }

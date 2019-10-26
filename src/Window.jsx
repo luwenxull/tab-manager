@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import MD from './conditionalRequre'
-import Menu from './components/Menu.jsx';
+import MD from './mdui'
+import C from './components';
 // import Dialog from './components/Dialog.jsx'
 import SaveAsGroup from './SaveAsGroup.jsx'
 import SendToGroup from './SendToGroup.jsx'
@@ -152,7 +152,7 @@ export default class WindowC extends Component {
                         secondary={tab.url}
                       />
                       <MD.ListItemSecondaryAction>
-                        <Menu
+                        <C.Menu
                           menuItems={this.menuItems}
                           trigger={
                             <MD.IconButton>
@@ -160,8 +160,7 @@ export default class WindowC extends Component {
                             </MD.IconButton>
                           }
                           actionData={tab}
-                        >
-                        </Menu>
+                        />
                       </MD.ListItemSecondaryAction>
                     </MD.ListItem>
                   )
@@ -175,6 +174,10 @@ export default class WindowC extends Component {
                 this.props.window.isFake ? '移除' : '关闭'
               }
             </MD.Button>
+            {
+              this.props.window.isFake
+              && <MD.Button color="primary" onClick={this.openTabs}>打开</MD.Button>
+            }
             <MD.Button color="primary" onClick={this.showSendToGroup}>
               复制到组
             </MD.Button>
@@ -186,10 +189,6 @@ export default class WindowC extends Component {
                     confirm={this.handleSaveAsGroupAndClose}
                   />
                 )
-            }
-            {
-              this.props.window.isFake
-                && <MD.Button color="primary" onClick={this.openTabs}>打开</MD.Button>
             }
             <SaveAsGroup
               triggerText="保存为组"

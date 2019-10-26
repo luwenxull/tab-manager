@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import MD from './conditionalRequre';
+import MD from './mdui';
+import C from './components';
 import WindowC from './Window.jsx';
 import { copyTab } from './util';
 import { SavedGroupsContext } from './context';
@@ -73,7 +74,7 @@ export default class Group extends Component {
   render() {
     return (
       <>
-        <MD.Box m={2}>
+        {/* <MD.Box m={2}>
           {
             !this.props.group.unnamed
             && (
@@ -84,9 +85,48 @@ export default class Group extends Component {
               >删除当前组</MD.Button>
             )
           }
-        </MD.Box>
+        </MD.Box> */}
         {
           this.createWindow()
+        }
+        {
+          !this.props.group.unnamed
+          && (
+            <C.Dialog
+              dialog={
+                {
+                  fullWidth: true,
+                  maxWidth: 'xs'
+                }
+              }
+              trigger={
+                <C.Fab color="secondary" className="fab">
+                  <MD.DeleteIcon />
+                </C.Fab>
+              }
+              render={
+                (handleClose) => {
+                  return (
+                    <>
+                      <MD.DialogTitle>确认删除该组？</MD.DialogTitle>
+                      <MD.DialogActions>
+                        <MD.Button onClick={handleClose} color="secondary">
+                          取消
+                        </MD.Button>
+                        <MD.Button
+                          onClick={this.deleteGroup}
+                          color="primary"
+                        >
+                          删除
+                        </MD.Button>
+                      </MD.DialogActions>
+                    </>
+                  )
+                }
+              }
+            >
+            </C.Dialog>
+          )
         }
       </>
     )

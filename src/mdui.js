@@ -8,6 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle'
+import Fab from '@material-ui/core/Fab';
 import FormControl from '@material-ui/core/FormControl'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
@@ -29,6 +30,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import TextField from '@material-ui/core/TextField';
 
+import DeleteIcon from '@material-ui/icons/Delete';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 export default {
@@ -47,6 +49,7 @@ export default {
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   ExpandMoreIcon,
+  Fab,
   FormControl,
   IconButton,
   InputLabel,
@@ -58,9 +61,11 @@ export default {
   ListItemText,
   Menu,
   MenuItem,
-  MoreVertIcon,
   Select,
   Tab,
   Tabs,
   TextField,
+  // icon
+  DeleteIcon,
+  MoreVertIcon,
 }
