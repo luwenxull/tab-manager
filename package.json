@@ -1,6 +1,6 @@
 {
   "name": "tab-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": "git@github.com:luwenxull/tab-manager.git",
   "author": "luwenxull <992273307@qq.com>",

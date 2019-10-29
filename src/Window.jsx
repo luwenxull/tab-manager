@@ -5,6 +5,7 @@ import C from './components';
 import SaveAsGroup from './SaveAsGroup.jsx'
 import SendToGroup from './SendToGroup.jsx'
 import { SavedGroupsContext } from './context';
+import { copyTab } from './util';
 
 export default class WindowC extends Component {
   constructor(props) {
@@ -102,7 +103,7 @@ export default class WindowC extends Component {
 
   handleSendToGroup(groups) {
     groups.forEach(group => {
-      group.window.tabs = group.window.tabs.concat(this.state.activeTabs)
+      group.window.tabs = group.window.tabs.concat(this.state.activeTabs.map(copyTab))
     })
     chrome.storage.local.set({
       savedGroups: this.context
