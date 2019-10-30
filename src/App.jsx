@@ -30,7 +30,9 @@ class App extends Component {
               return {
                 isFake: false,
                 id: w.id,
-                tabs: w.tabs.map(copyTab).filter(tab => {
+                tabs: w.tabs.map((tab) => {
+                  return copyTab(tab, false)
+                }).filter(tab => {
                   if (
                     tab.title === 'Tab Manager'
                     && tab.url.indexOf('chrome-extension://') > -1
