@@ -92,6 +92,7 @@ export default class WindowC extends Component {
 
   handleChange(checked, tab) {
     tab.checked = checked
+    this.setState({})
   }
 
   showSendToGroup() {
@@ -139,6 +140,7 @@ export default class WindowC extends Component {
                         <MD.Checkbox
                           edge="start"
                           disableRipple
+                          checked={tab.checked}
                           onChange={(e) => {
                             this.handleChange(e.target.checked, tab)
                           }}
